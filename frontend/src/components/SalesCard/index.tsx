@@ -22,11 +22,17 @@ function SalesCard() {
 
     //requisição ao backend, e print apenas das promisses que deram certo
     useEffect(() => {
-        axios.get(`${BASE_URL}/sales`) //variável base URL se encontra em utils.request.ts
+
+        //converter dados de data para formato da requisição (YY/MM/dd)
+        const dmin = minDate.toISOString().slice(0,10);
+        const dmax = maxDate.toISOString().slice(0,10);
+
+        axios.get(`${BASE_URL}/sales?minDate=${dmin}&maxDate=${dmax}`) //variável base URL se encontra em utils.request.ts
             .then(response => {
                 setSales(response.data.content); //salvar apenas o content (lista de vendedores como do BD)
             });
-    }, []);
+    //programa para pesquisar novamente ao mudar minDate, maxDate
+    }, [minDate, maxDate] );
 
     return (
         <div className="dsmeta-card">
